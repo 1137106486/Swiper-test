@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/swiper.css">
+    <style>
+            * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body, #banner, #banner .swiper-slide{
+            height: 100%;
+        }
+
+        body{
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        #main{
+            max-width: 640px;
+            margin: 0 auto;
+            height: 100%;
+            position: relative;
+        }
+
+        #banner .swiper-slide img{
+            width: 100%;
+        }
+
+        .thumb-list{
+            position: absolute;
+            width: 100%;
+            left: 0;
+            bottom: 5%;
+        }
+
+        .thumb-list .thumb{
+            width: 20%;
+            float: left;
+            margin-left: 4%;
+        }
+
+        .thumb-list .thumb img{
+            width: 100%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div class="swiper-container top">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img src="img/zhiling1.jpg" alt="">
+                </div>
+                <div class="swiper-slide">
+                        <img src="img/zhiling2.jpg" alt="">
+                  </div>
+                  <div class="swiper-slide">
+                        <img src="img/zhiling3.jpg" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                            <img src="img/zhiling4.jpg" alt="">
+                        </div>
+            </div>
+        </div>
+        <div class="thumb-list">
+            <div class="swiper-container thumb">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="img/thumb1.jpg" alt="">
+                    </div>
+                    <div class="swiper-slide">
+                            <img src="img/thumb1_h.jpg" alt="">
+                        </div>
+                </div>
+            </div>
+                <div class="swiper-container thumb">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <img src="img/thumb2.jpg" alt="">
+                            </div>
+                            <div class="swiper-slide">
+                                    <img src="img/thumb2_h.jpg" alt="">
+                                </div>
+                        </div>
+                    </div>
+                    <div class="swiper-container thumb">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="img/thumb3.jpg" alt="">
+                                </div>
+                                <div class="swiper-slide">
+                                        <img src="img/thumb3_h.jpg" alt="">
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="swiper-container thumb">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <img src="img/thumb4.jpg" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                            <img src="img/thumb4_h.jpg" alt="">
+                                        </div>
+                                </div>
+                            </div>
+        </div>
+    </div>
+    <script src="js/swiper.js"></script>
+    <script>
+        window.addEventListener('load',function () { 
+            var imgSwiper = new Swiper('.top',{ 
+                //1.1 开启鼠标滚轮控制Swiper切换
+                mousewheel: true,
+                //1.2 slide的切换效果
+                effect : 'coverflow',
+                //1.3 控制切换的时间
+                speed:300,
+                //1.4 监视进度
+                watchSlidesProgress : true,
+                //1.5 监控事件
+                on:{
+                    //触摸移动
+                    touchMove:function () { 
+                       //console.log(1);
+                       for(var i=0, len = this.slides.length; i<len; i++){
+                        var slideProgress = Math.abs(this.slides[i].progress);
+                        console.log(slideProgress);
+                        if(slideProgress < 1){
+                            imgMinSwiper[i].setTranslate(imgMinSwiper[i].width * (slideProgress - 1));
+                        }
+                       }
+                     },
+                    //开始移动
+                    transitionStart:function() {
+                        var activeIndex = this.activeIndex;
+                        for( var i=0; i<imgMinSwiper.length; i++){
+                            if(i === activeIndex){
+                                imgMinSwiper[i].slideTo(1);
+                            }else{
+                                imgMinSwiper[i].slideTo(0);
+                            }
+                        }
+                    }
+                }
+             });
+             //2.1 控制下方图标的swiper切换
+             var imgMinSwiper = new Swiper('.thumb',{
+                 // 2.1 监视进度
+                watchSlidesProgress : true,
+                 // 2.3 slide的切换效果
+                effect : 'cube',
+                // 2.4 无法触摸
+                touchRatio : 0,//触摸变慢
+                // 2.5 按下事件
+                on:{
+                    tap:function(){
+                        el:'.swiper-slide',
+                        console.log(this.$el.index());
+                        imgSwiper.slideTo(this.$el.index());
+                    }
+                }
+             });
+              // 3.0 进入后自动显示第一个
+              imgMinSwiper[0].slideTo(1,0);
+         });
+    </script>
+</body>
+</html>
